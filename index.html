@@ -838,6 +838,39 @@ input:checked + .slider:before {transform:translateX(20px)}
 .welcome-ad-banner a span{color:#6d4c41;margin-top:1px}
 #welcomeAdClose{position:absolute;right:6px;top:6px;width:24px;height:24px;margin:0;padding:0;background:#f5f0eb;color:#5d4037;border:0;border-radius:50%;font-size:16px;line-height:24px}
 @media(max-height:520px){.welcome-ad-banner{bottom:5px;padding:5px 30px 5px 8px}}
+
+/* Mobile tile sizing: keep category names clear of percentage labels */
+.tiles{
+  gap:10px !important;
+  padding:1px !important;
+}
+.tile,.save-tile{
+  min-height:112px !important;
+  aspect-ratio:1.58 / 1 !important;
+  border-radius:15px !important;
+}
+.tile-center-name{
+  width:70% !important;
+  max-width:70% !important;
+  font-size:clamp(14px,4.2vw,18px) !important;
+  line-height:1.12 !important;
+  letter-spacing:0 !important;
+  overflow-wrap:anywhere;
+}
+.tile .cat-percent-contrib{
+  right:9px !important;
+  bottom:8px !important;
+  font-size:10px !important;
+  letter-spacing:0 !important;
+}
+@media(min-width:760px){
+  .tile,.save-tile{
+    min-height:120px !important;
+  }
+  .tile-center-name{
+    font-size:17px !important;
+  }
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
