@@ -1,6 +1,22 @@
 (function(){
-  function initWelcomeAd(){
-    var cfg=window.EXPENSE_TRACKER_AD_CONFIG||{};
+  var localCfg=window.EXPENSE_TRACKER_AD_CONFIG||{};
+  var endpoint=localCfg.remoteConfigUrl||'https://android-release.expense-tracker-react-db4.pages.dev/remote-config.json';
+
+  function validAdConfig(value){
+    if(!value || typeof value!=='object') return null;
+    var allowed={
+      enabled:typeof value.enabled==='boolean'?value.enabled:false,
+      placement:value.placement==='welcome'?'welcome':'disabled',
+      title:typeof value.title==='string'?value.title.slice(0,100):'A message from our partners',
+      message:typeof value.message==='string'?value.message.slice(0,240):'',
+      destinationUrl:typeof value.destinationUrl==='string'?value.destinationUrl:'',
+      campaignStartsAt:typeof value.campaignStartsAt==='string'?value.campaignStartsAt:'',
+      campaignEndsAt:typeof value.campaignEndsAt==='string'?value.campaignEndsAt:''
+    };
+    return allowed;
+  }
+
+  function showWelcomeAd(cfg){
     var banner=document.getElementById('welcomeAdBanner');
     if(!banner || !cfg.enabled || cfg.placement!=='welcome') return;
     var now=Date.now();
@@ -18,8 +34,30 @@
     }
     banner.hidden=false;
     var close=document.getElementById('welcomeAdClose');
-    if(close) close.addEventListener('click',function(){banner.hidden=true;});
+    if(close) close.addEventListener('click',function(){banner.hidden=true;},{once:true});
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initWelcomeAd,{once:true});
-  else initWelcomeAd();
+
+  async function loadRemoteConfig(){
+    try{
+      var controller=typeof AbortController!=='undefined'?new AbortController():null;
+      var timeout=controller?setTimeout(function(){controller.abort();},3500):null;
+      var response=await fetch(endpoint,{method:'GET',cache:'no-store',mode:'cors',signal:controller?controller.signal:undefined});
+      if(timeout) clearTimeout(timeout);
+      if(!response.ok) throw new Error('Remote config unavailable');
+      var payload=await response.json();
+      if(payload && payload.schemaVersion===1 && payload.ads){
+        return Object.assign({},localCfg,validAdConfig(payload.ads)||{});
+      }
+    }catch(error){
+      // Keep the app usable when offline or when Cloudflare is unavailable.
+    }
+    return localCfg;
+  }
+
+  async function init(){
+    var cfg=await loadRemoteConfig();
+    showWelcomeAd(cfg);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
 })();
