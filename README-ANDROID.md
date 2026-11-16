@@ -38,3 +38,17 @@ Suggested premium entitlement scope for the next implementation stage: advanced 
 - Bundle or verify all external CDN libraries for offline behavior.
 - Add a privacy policy and complete Play Console data-safety disclosures based on actual app behavior.
 - The Play Console account and publishing steps must be handled by an eligible adult account holder if the developer is under 18.
+
+
+## Cloudflare hybrid configuration updates
+The Android package keeps its core HTML/CSS/JavaScript bundled locally. On launch, it requests the public, non-sensitive `remote-config.json` from the Cloudflare Pages preview hostname for this branch. The local configuration remains the fallback when the device is offline or Cloudflare cannot be reached.
+
+Cloudflare can update supported settings and content (for example, the welcome advertisement campaign) without an APK rebuild. This endpoint is deliberately limited to JSON configuration: it must not deliver executable JavaScript, APKs, or dynamically downloaded code. Changes to app logic, layout, native capabilities, billing, or other executable code still require a signed Play Store release.
+
+The `android-release` branch is deployed by the existing Pages project as a preview at:
+https://android-release.expense-tracker-react-db4.pages.dev
+
+The remote config endpoint is:
+https://android-release.expense-tracker-react-db4.pages.dev/remote-config.json
+
+Keep the JSON public and non-sensitive. Never put API keys, payment credentials, user expense data, or private configuration in it.
