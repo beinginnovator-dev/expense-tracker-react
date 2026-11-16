@@ -25,6 +25,8 @@ jobs:
           java-version: '21'
       - name: Install dependencies
         run: npm install
+      - name: Run 100-entry expense regression tests
+        run: npm run test:100
       - name: Generate Android project
         run: npm run android:init
       - name: Verify Google Play target API requirement
