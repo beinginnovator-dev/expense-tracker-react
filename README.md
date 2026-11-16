@@ -1,40 +1,10 @@
-# My Wallet — React Expense Tracker
+# Expense Tracker — Original HTML5 + JavaScript
 
-React + Vite expense tracker project.
+This repository now serves the original implementation supplied in `44up32rnt.zip`.
 
-## Project structure
+- Main application: `index.html` (original single-file HTML/CSS/JavaScript app)
+- Additional supplied files: `styles.css`, `script.js`, and `swipe-navigation.js`
+- No React, Vite, npm install, or build step is required.
+- Cloudflare Pages serves the repository root as a static site.
 
-- `index.html` — Vite HTML entry
-- `src/main.jsx` — React bootstrap
-- `src/App.jsx` — Expense tracker application
-- `src/styles.css` — Responsive application styles
-- `public/legacy-swipe-navigation.js` — Legacy navigation helper retained as a reference
-
-## Run locally
-
-```bash
-npm install
-npm run dev
-```
-
-## Production build
-
-```bash
-npm run build
-```
-
-Vite writes the production output to `dist/`.
-
-## Cloudflare Pages
-
-- Framework preset: Vite
-- Production branch: `main`
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Root directory: `/`
-
-The React implementation includes expense entry/edit/delete, category totals, search and month filtering, savings goals, reminders, CSV import/export, text reports, print-to-PDF, local persistence, theme and profile settings.
-
-The original legacy HTML file remains in the supplied ZIP and has not been copied into this repository snapshot.
-
-Deployment target: Cloudflare Pages project `expense-tracker-react`.
+The supplied original HTML is preserved as-is. The additional JavaScript files are kept as supplied; the HTML does not currently reference them automatically.
