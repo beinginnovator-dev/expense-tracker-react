@@ -1,5 +1,4 @@
-// Developer-managed welcome banner configuration.
-// Set enabled=false to hide all ads. Keep banners small and non-blocking.
+// Local fallback configuration. Remote non-code settings are loaded from Cloudflare Pages.
 window.EXPENSE_TRACKER_AD_CONFIG = {
   enabled: false,
   placement: "welcome",
@@ -7,5 +6,6 @@ window.EXPENSE_TRACKER_AD_CONFIG = {
   message: "Discover more",
   destinationUrl: "",
   campaignStartsAt: "",
-  campaignEndsAt: ""
+  campaignEndsAt: "",
+  remoteConfigUrl: "https://android-release.expense-tracker-react-db4.pages.dev/remote-config.json"
 };
