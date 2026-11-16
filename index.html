@@ -981,6 +981,57 @@ img,canvas,svg,video,iframe{
     margin-bottom:0;
   }
 }
+
+/* Final mobile dialog positioning: prevent tall forms starting above the viewport */
+.onboard-overlay{
+  position:fixed !important;
+  inset:0 !important;
+  height:100vh !important;
+  height:100dvh !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  align-items:flex-start !important;
+  justify-content:center !important;
+  padding: max(12px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom)) !important;
+  box-sizing:border-box !important;
+  overscroll-behavior:contain;
+}
+.onboard-overlay .onboard-card{
+  width:100% !important;
+  max-width:460px !important;
+  max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin:12px auto !important;
+  flex:0 0 auto !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  box-sizing:border-box !important;
+  overscroll-behavior:contain;
+}
+#feedbackModal .onboard-card{
+  text-align:left !important;
+  padding:clamp(12px,3.5vw,20px) !important;
+}
+#feedbackModal .onboard-card h3{
+  font-size:clamp(19px,5vw,24px) !important;
+  line-height:1.2 !important;
+}
+#feedbackModal .onboard-card input,
+#feedbackModal .onboard-card select,
+#feedbackModal .onboard-card textarea,
+#feedbackModal .onboard-card button{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  font-size:16px;
+}
+#feedbackModal .onboard-card textarea{min-height:100px;max-height:30dvh;}
+@media(max-height:620px){
+  .onboard-overlay{padding-top:8px !important;padding-bottom:8px !important;}
+  .onboard-overlay .onboard-card{max-height:calc(100dvh - 16px) !important;margin:8px auto !important;}
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
