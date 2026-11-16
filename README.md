@@ -36,3 +36,5 @@ Vite writes the production output to `dist/`.
 The React implementation includes expense entry/edit/delete, category totals, search and month filtering, savings goals, reminders, CSV import/export, text reports, print-to-PDF, local persistence, theme and profile settings.
 
 The original legacy HTML file remains in the supplied ZIP and has not been copied into this repository snapshot.
+
+Deployment target: Cloudflare Pages project `expense-tracker-react`.
