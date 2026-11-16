@@ -828,6 +828,16 @@ input:checked + .slider:before {transform:translateX(20px)}
 .nav-badge.pulse{animation:pulse-badge 1.5s infinite}
 @keyframes pulse-badge{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 
+
+/* Small, non-blocking developer-managed welcome banner */
+.welcome-ad-banner{position:absolute;left:12px;right:12px;bottom:12px;max-width:560px;margin:0 auto;padding:8px 34px 8px 10px;background:#fff;border:1px solid #d7ccc8;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.10);font-size:11px;line-height:1.35;z-index:20;text-align:left}
+.welcome-ad-banner[hidden]{display:none}
+.welcome-ad-label{display:block;font-size:8px;letter-spacing:.7px;color:#8d6e63;font-weight:800;margin-bottom:2px}
+.welcome-ad-banner a{display:block;color:#3e2723;text-decoration:none}
+.welcome-ad-banner a strong,.welcome-ad-banner a span{display:block}
+.welcome-ad-banner a span{color:#6d4c41;margin-top:1px}
+#welcomeAdClose{position:absolute;right:6px;top:6px;width:24px;height:24px;margin:0;padding:0;background:#f5f0eb;color:#5d4037;border:0;border-radius:50%;font-size:16px;line-height:24px}
+@media(max-height:520px){.welcome-ad-banner{bottom:5px;padding:5px 30px 5px 8px}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -850,6 +860,14 @@ input:checked + .slider:before {transform:translateX(20px)}
     <div class="face bottom" id="walletBottom"></div>
   </div>
   <div class="tap-hint">👆 Tap wallet to open</div>
+  <div id="welcomeAdBanner" class="welcome-ad-banner" hidden aria-label="Advertisement">
+    <span class="welcome-ad-label">ADVERTISEMENT</span>
+    <a id="welcomeAdLink" href="#" target="_blank" rel="noopener noreferrer">
+      <strong id="welcomeAdTitle">A message from our partners</strong>
+      <span id="welcomeAdText">Discover more</span>
+    </a>
+    <button type="button" id="welcomeAdClose" aria-label="Dismiss advertisement">×</button>
+  </div>
 </div>
 
 <!-- Main Wallet Settings Modal -->
@@ -3025,5 +3043,8 @@ document.addEventListener('pointerdown', function(ev){
 console.log('V10 FINAL - Only total % with proper bar, limit bars killed');
 </script>
 
+
+<script src="./ads-config.js"></script>
+<script src="./ads.js"></script>
 </body>
 </html>
