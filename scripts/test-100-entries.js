@@ -5,10 +5,8 @@ const assert = require('assert');
 const html = fs.readFileSync('index.html', 'utf8');
 
 function extractFunction(name) {
-  const marker = new RegExp('function\\\\s+' + name + '\\\\s*\\\\(');
-  const match = marker.exec(html);
-  assert(match, 'Missing app function: ' + name);
-  const start = match.index;
+  const start = html.indexOf('function ' + name + '(');
+  assert(start >= 0, 'Missing app function: ' + name);
   const open = html.indexOf('{', match.index);
   assert(open >= 0, 'Missing body for ' + name);
 
@@ -19,7 +17,7 @@ function extractFunction(name) {
     if (blockComment) { if (c === '*' && n === '/') { blockComment = false; i++; } continue; }
     if (quote) {
       if (escaped) { escaped = false; continue; }
-      if (c === '\\\\') { escaped = true; continue; }
+      if (c === '\\') { escaped = true; continue; }
       if (c === quote) quote = null;
       continue;
     }
