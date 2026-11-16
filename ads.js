@@ -4,7 +4,7 @@
 
   function validAdConfig(value){
     if(!value || typeof value!=='object') return null;
-    var allowed={
+    return {
       enabled:typeof value.enabled==='boolean'?value.enabled:false,
       placement:value.placement==='welcome'?'welcome':'disabled',
       title:typeof value.title==='string'?value.title.slice(0,100):'A message from our partners',
@@ -13,9 +13,7 @@
       campaignStartsAt:typeof value.campaignStartsAt==='string'?value.campaignStartsAt:'',
       campaignEndsAt:typeof value.campaignEndsAt==='string'?value.campaignEndsAt:''
     };
-    return allowed;
   }
-
   function showWelcomeAd(cfg){
     var banner=document.getElementById('welcomeAdBanner');
     if(!banner || !cfg.enabled || cfg.placement!=='welcome') return;
@@ -30,13 +28,13 @@
     if(link){
       var safeUrl='';
       try{var u=new URL(cfg.destinationUrl,window.location.href);if(u.protocol==='https:'||u.protocol==='http:')safeUrl=u.href;}catch(e){}
-      if(safeUrl){link.href=safeUrl;}else{link.removeAttribute('href');link.removeAttribute('target');}
+      if(safeUrl) link.href=safeUrl;
+      else {link.removeAttribute('href');link.removeAttribute('target');}
     }
     banner.hidden=false;
     var close=document.getElementById('welcomeAdClose');
     if(close) close.addEventListener('click',function(){banner.hidden=true;},{once:true});
   }
-
   async function loadRemoteConfig(){
     try{
       var controller=typeof AbortController!=='undefined'?new AbortController():null;
@@ -53,11 +51,7 @@
     }
     return localCfg;
   }
-
-  async function init(){
-    var cfg=await loadRemoteConfig();
-    showWelcomeAd(cfg);
-  }
+  async function init(){showWelcomeAd(await loadRemoteConfig());}
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
   else init();
 })();
