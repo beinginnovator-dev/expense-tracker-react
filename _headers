@@ -1,0 +1,5 @@
+/remote-config.json
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, OPTIONS
+  Cache-Control: public, max-age=60
+  Content-Type: application/json; charset=utf-8
