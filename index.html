@@ -1079,24 +1079,8 @@ button.small,button.edit,button.danger,.card-dropdown-btn,.dots-btn,.icon-btn{mi
   <label style="font-size:11px;font-weight:700">Theme</label>
   <select id="setTheme" onchange="previewTheme()"><option value="matt">Matt Light + Belt</option><option value="classic">Classic Brown</option><option value="black">Black</option><option value="blue">Blue</option><option value="neon">Futurastic Neon</option><option value="light">Light Minimal</option></select>
   <div id="themePreview" style="height:44px;border-radius:8px;margin:6px 0;border:1px solid #d7ccc8"></div>
-  <hr><h3>Promotion Popup</h3>
-<label style="font-size:11px">Display event</label><select id="promoTrigger"><option value="disabled">Disabled</option><option value="app_open">App opens</option><option value="tab_open">Tab opens</option><option value="both">Both</option></select>
-<input id="promoTitle" placeholder="Promotion title"><textarea id="promoMessage" rows="2" placeholder="Promotion message"></textarea><input id="promoUrl" type="url" placeholder="Optional HTTPS link">
-<select id="promoFrequency"><option value="once_session">Once per session</option><option value="daily">Once per day</option><option value="every_event">Every matching event</option></select><button class="ghost" onclick="savePromoSettings()">Save Promotion</button>
-<p style="font-size:10px;color:#6D4C41">Popup event and frequency settings are stored on this device. Use the controls above to preview the promotion behaviour on this installation.</p>
-<hr><h3>Live Users & PWA Installs</h3>
-<p style="font-size:11px;color:#6D4C41">Anonymous aggregate counts. Online means active within the last 90 seconds.</p>
-<button class="ghost" onclick="refreshAudienceStats()">View Live Audience</button>
-<div id="audienceStatsPanel" style="display:none;background:#fdf8f3;border:1px solid #d7ccc8;border-radius:10px;padding:10px;margin:6px 0">
- <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
-  <div style="background:#fff;padding:10px;border-radius:8px"><small>Online now</small><div id="audOnline" style="font-size:24px;font-weight:900;color:#2e7d32">—</div></div>
-  <div style="background:#fff;padding:10px;border-radius:8px"><small>PWA installs reported</small><div id="audInstalled" style="font-size:24px;font-weight:900;color:#1565c0">—</div></div>
-  <div style="background:#fff;padding:10px;border-radius:8px"><small>Total devices seen</small><div id="audTotal" style="font-size:24px;font-weight:900">—</div></div>
-  <div style="background:#fff;padding:10px;border-radius:8px"><small>New devices today</small><div id="audToday" style="font-size:24px;font-weight:900">—</div></div>
- </div>
- <p id="audUpdated" style="font-size:10px;color:#6D4C41;margin:8px 0 0">Not refreshed yet</p>
-</div>
-<hr><h3>Data Backup</h3><p style="font-size:11px">Export a backup before updates. Your local records are not intentionally cleared by app updates.</p><button class="ghost" onclick="exportExpenseBackup()">Export Backup</button><button class="ghost" onclick="restoreExpenseBackup()">Restore Local Backup</button><input type="file" accept=".json,application/json" onchange="importExpenseBackup(event)">
+  <p style="font-size:10px;color:#6D4C41">Promotions are managed centrally by the app creator.</p>
+  <hr><h3>Data Backup</h3><p style="font-size:11px">Export a backup before updates. Your local records are not intentionally cleared by app updates.</p><button class="ghost" onclick="exportExpenseBackup()">Export Backup</button><button class="ghost" onclick="restoreExpenseBackup()">Restore Local Backup</button><input type="file" accept=".json,application/json" onchange="importExpenseBackup(event)">
 <button onclick="saveSettings()">Save Wallet Settings</button><button class="danger" onclick="closeSettings()" style="margin-top:6px;width:100%">Cancel</button>
 </div></div>
 
@@ -3269,10 +3253,9 @@ console.log('V10 FINAL - Only total % with proper bar, limit bars killed');
 <script>
 window.completeQuickSignup=function(){var n=(safeEl('signupName').value||'').trim(),e=(safeEl('signupEmail').value||'').trim();if(!n){alert('Enter your name or skip for now.');return;}name=n;localStorage.setItem('name',n);if(e)localStorage.setItem('signup_email_local',e);localStorage.setItem('quick_signup_done_v1','true');saveAll();safeEl('quickSignupModal').style.display='none';if(localStorage.getItem('onboarded_v2')!=='true')safeEl('onboardingModal').style.display='flex';};
 window.skipQuickSignup=function(){localStorage.setItem('quick_signup_done_v1','true');safeEl('quickSignupModal').style.display='none';if(localStorage.getItem('onboarded_v2')!=='true')safeEl('onboardingModal').style.display='flex';};
-function getPromo(){try{return JSON.parse(localStorage.getItem('expense_promo_config_v1')||'{}')}catch(e){return {}}}
-window.loadPromoSettings=function(){var c=getPromo();[['promoTrigger','trigger','disabled'],['promoTitle','title',''],['promoMessage','message',''],['promoUrl','url',''],['promoFrequency','frequency','once_session']].forEach(function(x){if(safeEl(x[0]))safeEl(x[0]).value=c[x[1]]||x[2];});};
-window.savePromoSettings=function(){var c={trigger:safeEl('promoTrigger').value,title:safeEl('promoTitle').value.trim(),message:safeEl('promoMessage').value.trim(),url:safeEl('promoUrl').value.trim(),frequency:safeEl('promoFrequency').value};if(c.url&&c.url.indexOf('https://')!==0){alert('Use an HTTPS destination link.');return;}localStorage.setItem('expense_promo_config_v1',JSON.stringify(c));alert('Promotion settings saved.');};
-window.maybeShowExpensePromo=function(ev){var c=getPromo();if(!c.trigger||c.trigger==='disabled'||(!c.title&&!c.message)||!(c.trigger==='both'||c.trigger===ev))return;var day=new Date().toISOString().slice(0,10),last=localStorage.getItem('expense_promo_last_v1')||'';if(c.frequency==='once_session'&&last.indexOf('session:')===0)return;if(c.frequency==='daily'&&last==='day:'+day)return;var m=safeEl('expensePromoModal');if(!m){m=document.createElement('div');m.id='expensePromoModal';m.className='modal';m.innerHTML='<div class="modal-content"><div style="font-size:11px;font-weight:800">SPONSORED MESSAGE</div><h3 id="expensePromoTitle"></h3><p id="expensePromoMessage"></p><a id="expensePromoLink" target="_blank" rel="noopener noreferrer">Learn more</a><button class="ghost" id="expensePromoClose">Close</button></div>';document.body.appendChild(m);m.querySelector('#expensePromoClose').onclick=function(){m.style.display='none';};}safeEl('expensePromoTitle').textContent=c.title||'A message for you';safeEl('expensePromoMessage').textContent=c.message||'';var a=safeEl('expensePromoLink');a.style.display='none';if(c.url){a.href=c.url;a.style.display='inline-block';}m.style.display='flex';if(c.frequency==='once_session')localStorage.setItem('expense_promo_last_v1','session:'+Date.now());if(c.frequency==='daily')localStorage.setItem('expense_promo_last_v1','day:'+day);};
+let expensePromoCache=null,expensePromoLoadedAt=0;
+async function getPromo(){if(expensePromoCache&&Date.now()-expensePromoLoadedAt<60000)return expensePromoCache;try{const r=await fetch('./api/promotion',{cache:'no-store'});expensePromoCache=r.ok?await r.json():{};expensePromoLoadedAt=Date.now();return expensePromoCache;}catch(e){return expensePromoCache||{};}}
+window.maybeShowExpensePromo=async function(ev){var c=await getPromo();if(!c.trigger||c.trigger==='disabled'||(!c.title&&!c.message)||!(c.trigger==='both'||c.trigger===ev))return;var day=new Date().toISOString().slice(0,10),last=localStorage.getItem('expense_promo_last_v1')||'';if(c.frequency==='once_session'&&last.indexOf('session:')===0)return;if(c.frequency==='daily'&&last==='day:'+day)return;var m=safeEl('expensePromoModal');if(!m){m=document.createElement('div');m.id='expensePromoModal';m.className='modal';m.innerHTML='<div class="modal-content"><div style="font-size:11px;font-weight:800">SPONSORED MESSAGE</div><h3 id="expensePromoTitle"></h3><p id="expensePromoMessage"></p><a id="expensePromoLink" target="_blank" rel="noopener noreferrer">Learn more</a><button class="ghost" id="expensePromoClose">Close</button></div>';document.body.appendChild(m);m.querySelector('#expensePromoClose').onclick=function(){m.style.display='none';};}safeEl('expensePromoTitle').textContent=c.title||'A message for you';safeEl('expensePromoMessage').textContent=c.message||'';var link=safeEl('expensePromoLink');link.style.display='none';if(c.url){link.href=c.url;link.style.display='inline-block';}m.style.display='flex';if(c.frequency==='once_session')localStorage.setItem('expense_promo_last_v1','session:'+Date.now());if(c.frequency==='daily')localStorage.setItem('expense_promo_last_v1','day:'+day);};
 window.exportExpenseBackup=function(){var keys=['exp','cats','catColors','catDescs','budget','targets','rems','savingsCards','savingsEntries','name','brand','theme','targetSavingsValue','showDashboard','showAmounts','privateCards','hiddenDetails','hideAllData','dashCardSkin','lastReadUpdate'],data={};keys.forEach(function(k){var v=localStorage.getItem(k);if(v!==null)data[k]=v;});var blob=new Blob([JSON.stringify({schemaVersion:1,exportedAt:new Date().toISOString(),data:data},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='expense-tracker-backup.json';a.click();URL.revokeObjectURL(url);};
 window.restoreExpenseBackup=function(){try{var b=JSON.parse(localStorage.getItem('expense_tracker_recovery_v1')||'null');if(!b||!b.data)throw Error('No local backup available yet.');if(!confirm('Restore saved backup from '+b.savedAt+'?'))return;Object.keys(b.data).forEach(function(k){localStorage.setItem(k,b.data[k]);});location.reload();}catch(e){alert(e.message);}};
 window.importExpenseBackup=function(ev){var file=ev.target.files&&ev.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var b=JSON.parse(r.result);if(b.schemaVersion!==1||!b.data)throw Error('Unrecognised backup file.');if(!confirm('Import this backup?'))return;Object.keys(b.data).forEach(function(k){localStorage.setItem(k,String(b.data[k]));});location.reload();}catch(e){alert(e.message);}};r.readAsText(file);};
@@ -3396,7 +3379,7 @@ import { App } from 'https://esm.sh/@capacitor/app@8.0.0';
 
 
 <script>
-/* Anonymous aggregate audience telemetry: no names, emails or IP addresses are collected. */
+/* Anonymous aggregate telemetry. Admin statistics are available only from the Access-protected creator route. */
 (function(){
  const API='./api/analytics';
  let deviceId=localStorage.getItem('expense_analytics_device_v1');
@@ -3405,23 +3388,10 @@ import { App } from 'https://esm.sh/@capacitor/app@8.0.0';
   localStorage.setItem('expense_analytics_device_v1',deviceId);
  }
  function installed(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
- async function ping(){
-  if(document.visibilityState==='hidden')return;
-  try{await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId,installed:installed()})});}catch(e){}
- }
- window.addEventListener('appinstalled',()=>{ping();});
+ async function ping(){if(document.visibilityState==='hidden')return;try{await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId,installed:installed()})});}catch(e){}}
+ window.addEventListener('appinstalled',ping);
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')ping();});
  window.addEventListener('load',()=>{ping();setInterval(ping,30000);if(window.maybeShowExpensePromo)window.maybeShowExpensePromo('app_open');},{once:true});
- window.refreshAudienceStats=async function(){
-  const panel=document.getElementById('audienceStatsPanel');if(panel)panel.style.display='block';
-  const updated=document.getElementById('audUpdated');if(updated)updated.textContent='Loading…';
-  try{
-   const r=await fetch(API,{cache:'no-store'});if(!r.ok)throw new Error('Analytics API '+r.status);
-   const d=await r.json();
-   [['audOnline',d.onlineNow],['audInstalled',d.installedDevices],['audTotal',d.totalDevices],['audToday',d.newToday]].forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.textContent=Number(v||0).toLocaleString();});
-   if(updated)updated.textContent='Updated '+new Date().toLocaleTimeString()+' · Online window: 90 seconds';
-  }catch(e){if(updated)updated.textContent='Audience stats unavailable. Check Cloudflare deployment and D1 binding.';}
- };
 })();
 </script>
 
