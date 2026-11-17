@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#38200e">
+<link rel="icon" href="./assets/wallet-privacy.svg" type="image/svg+xml">
 <title>E-Wallet Matt Belt - Advanced</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -1224,7 +1227,7 @@ button.small,button.edit,button.danger,.card-dropdown-btn,.dots-btn,.icon-btn{mi
 </div></div>
 
 <div class="container" id="app" style="display:none">
-<div class="topbar"><h2>My Wallet</h2><div class="topbar-actions"><div class="icon-btn" onclick="openNotif()" style="position:relative">🔔<span id="walletNotifBadge" class="nav-badge hidden">0</span></div><div class="icon-btn" onclick="lock()">🔒</div><div class="icon-btn" onclick="openFeedback()" title="Send Feedback" style="background:#FFCC80;">💬</div></div></div>
+<div class="topbar"><h2>My Wallet</h2><div class="topbar-actions"><button id="pwaInstallBtn" class="icon-btn" type="button" onclick="installExpensePWA()" title="Install Expense Tracker" style="width:auto;min-width:36px;padding:0 9px!important;font-size:11px!important;white-space:nowrap">⬇ Install App</button><div class="icon-btn" onclick="openNotif()" style="position:relative">🔔<span id="walletNotifBadge" class="nav-badge hidden">0</span></div><div class="icon-btn" onclick="lock()">🔒</div><div class="icon-btn" onclick="openFeedback()" title="Send Feedback" style="background:#FFCC80;">💬</div></div></div>
 <div class="nav-row"><button class="nav-wallet" onclick="showPage(1)">Wallet <span id="badgeWallet" class="nav-badge hidden">0</span></button><button class="nav-log" onclick="showPage(2)">Log & Graph</button><button class="nav-save" onclick="showPage(3)">Savings</button><button class="nav-report" onclick="showPage(5)">📊 Report</button><button class="nav-report" onclick="showPage(6)" style="background:linear-gradient(135deg,#1565C0,#42A5F5);">📈 Transaction Insight</button><button class="nav-update" onclick="showPage(4)">Updates <span id="badgeUpdate" class="nav-badge hidden">0</span></button></div>
 <div id="page1" class="card">
 <div id="dashboardContainer" class="dashboard-container">
@@ -3351,6 +3354,30 @@ import { App } from 'https://esm.sh/@capacitor/app@8.0.0';
       setTimeout(() => { handlingBack = false; }, 250);
     }
   });
+})();
+</script>
+
+
+<script>
+/* PWA installation: show before the reminder/notification icon. */
+(function(){
+  var deferred=null,btn=document.getElementById('pwaInstallBtn');
+  if(!btn)return;
+  function standalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
+  function refresh(){btn.style.display=standalone()?'none':'inline-flex';}
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;refresh();btn.textContent='⬇ Install App';});
+  window.addEventListener('appinstalled',function(){deferred=null;refresh();});
+  window.installExpensePWA=async function(){
+    if(standalone()){btn.style.display='none';return;}
+    if(deferred){deferred.prompt();try{await deferred.userChoice;}catch(e){}deferred=null;refresh();return;}
+    // If the browser has not offered an install prompt yet, open the Cloudflare-hosted PWA.
+    window.open('https://expense-tracker-react-db4.pages.dev/','_blank','noopener');
+    alert('Open the Cloudflare app in Chrome, then use the browser menu → Install app or Add to Home screen.');
+  };
+  refresh();
+  if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+    window.addEventListener('load',function(){navigator.serviceWorker.register('./service-worker.js').catch(function(err){console.warn('PWA service worker:',err);});});
+  }
 })();
 </script>
 
