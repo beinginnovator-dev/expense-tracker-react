@@ -30,6 +30,8 @@ jobs:
         run: npm run test:100
       - name: Generate Android project
         run: npm run android:init
+      - name: Install icon conversion tool
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Apply wallet + privacy launcher icon
         run: npm run android:icon
       - name: Verify Google Play target API requirement
