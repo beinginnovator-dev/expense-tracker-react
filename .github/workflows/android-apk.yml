@@ -9,6 +9,7 @@ on:
       - 'ads*.js'
       - 'package.json'
       - 'capacitor.config.json'
+      - 'assets/**'
       - 'scripts/**'
       - '.github/workflows/android-apk.yml'
 jobs:
@@ -29,6 +30,8 @@ jobs:
         run: npm run test:100
       - name: Generate Android project
         run: npm run android:init
+      - name: Apply wallet + privacy launcher icon
+        run: npm run android:icon
       - name: Verify Google Play target API requirement
         run: |
           echo "Checking Capacitor Android target SDK..."
