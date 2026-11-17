@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-11-16T00:00:00Z",
+  "ads": {
+    "enabled": false,
+    "placement": "welcome",
+    "title": "A message from our partners",
+    "message": "Discover more",
+    "destinationUrl": "",
+    "campaignStartsAt": "",
+    "campaignEndsAt": ""
+  }
+}

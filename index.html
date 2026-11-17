@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#38200e">
+<link rel="icon" href="./assets/wallet-privacy.svg" type="image/svg+xml">
 <title>E-Wallet Matt Belt - Advanced</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -828,6 +831,214 @@ input:checked + .slider:before {transform:translateX(20px)}
 .nav-badge.pulse{animation:pulse-badge 1.5s infinite}
 @keyframes pulse-badge{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 
+
+/* Small, non-blocking developer-managed welcome banner */
+.welcome-ad-banner{position:absolute;left:12px;right:12px;bottom:12px;max-width:560px;margin:0 auto;padding:8px 34px 8px 10px;background:#fff;border:1px solid #d7ccc8;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.10);font-size:11px;line-height:1.35;z-index:20;text-align:left}
+.welcome-ad-banner[hidden]{display:none}
+.welcome-ad-label{display:block;font-size:8px;letter-spacing:.7px;color:#8d6e63;font-weight:800;margin-bottom:2px}
+.welcome-ad-banner a{display:block;color:#3e2723;text-decoration:none}
+.welcome-ad-banner a strong,.welcome-ad-banner a span{display:block}
+.welcome-ad-banner a span{color:#6d4c41;margin-top:1px}
+#welcomeAdClose{position:absolute;right:6px;top:6px;width:24px;height:24px;margin:0;padding:0;background:#f5f0eb;color:#5d4037;border:0;border-radius:50%;font-size:16px;line-height:24px}
+@media(max-height:520px){.welcome-ad-banner{bottom:5px;padding:5px 30px 5px 8px}}
+
+/* Mobile tile sizing: keep category names clear of percentage labels */
+.tiles{
+  gap:10px !important;
+  padding:1px !important;
+}
+.tile,.save-tile{
+  min-height:112px !important;
+  aspect-ratio:1.58 / 1 !important;
+  border-radius:15px !important;
+}
+.tile-center-name{
+  width:70% !important;
+  max-width:70% !important;
+  font-size:clamp(14px,4.2vw,18px) !important;
+  line-height:1.12 !important;
+  letter-spacing:0 !important;
+  overflow-wrap:anywhere;
+}
+.tile .cat-percent-contrib{
+  right:9px !important;
+  bottom:8px !important;
+  font-size:10px !important;
+  letter-spacing:0 !important;
+}
+@media(min-width:760px){
+  .tile,.save-tile{
+    min-height:120px !important;
+  }
+  .tile-center-name{
+    font-size:17px !important;
+  }
+}
+
+/* Compact category and savings tile typography */
+.tile .tile-center-name{
+  width:90% !important;
+  max-width:90% !important;
+  gap:4px !important;
+}
+.tile .tile-center-name span:first-child{
+  font-size:25px !important;
+  line-height:1 !important;
+}
+.tile .tile-center-name span:last-child{
+  font-size:clamp(13px,3.8vw,17px) !important;
+  line-height:1.08 !important;
+  font-weight:800 !important;
+  white-space:normal !important;
+  overflow-wrap:normal !important;
+  word-break:normal !important;
+  max-width:100% !important;
+}
+
+/* Release readiness: consistent mobile viewport and scroll-safe dialogs */
+html,body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+body{min-width:0}
+.container,.card,.nav-row,.tiles{
+  max-width:100%;
+  min-width:0;
+}
+img,canvas,svg,video,iframe{
+  max-width:100%;
+}
+.modal,.custom-modal,.onboard-overlay{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100vh;
+  height:100dvh;
+  max-height:100dvh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  align-items:flex-start !important;
+  justify-content:center;
+  padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  box-sizing:border-box;
+  overscroll-behavior:contain;
+}
+.modal-content,.custom-modal-content{
+  width:100%;
+  max-width:460px;
+  max-height:calc(100dvh - 24px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  margin:auto;
+  flex:0 0 auto;
+  box-sizing:border-box;
+}
+.onboard-card{
+  width:100%;
+  max-width:460px;
+  max-height:calc(100dvh - 24px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  margin:auto;
+  flex:0 0 auto;
+  box-sizing:border-box;
+  text-align:left;
+  overscroll-behavior:contain;
+}
+#feedbackModal .onboard-card{
+  max-width:460px;
+  padding:clamp(12px,3.5vw,20px);
+}
+#feedbackModal input,
+#feedbackModal select,
+#feedbackModal textarea,
+#feedbackModal button{
+  min-width:0;
+  max-width:100%;
+  font-size:16px;
+}
+#feedbackModal textarea{
+  min-height:110px;
+  resize:vertical;
+}
+@media(max-width:480px){
+  .container{padding:6px}
+  .card{padding:8px}
+  .modal,.custom-modal,.onboard-overlay{
+    padding-left:8px;
+    padding-right:8px;
+  }
+  .onboard-card{padding:14px}
+  .modal-content,.custom-modal-content{padding:12px}
+}
+@media(max-height:620px){
+  .modal,.custom-modal,.onboard-overlay{
+    align-items:flex-start !important;
+  }
+  .modal-content,.custom-modal-content,.onboard-card{
+    max-height:calc(100dvh - 16px);
+    margin-top:0;
+    margin-bottom:0;
+  }
+}
+
+/* Final mobile dialog positioning: prevent tall forms starting above the viewport */
+.onboard-overlay{
+  position:fixed !important;
+  inset:0 !important;
+  height:100vh !important;
+  height:100dvh !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  align-items:flex-start !important;
+  justify-content:center !important;
+  padding: max(12px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom)) !important;
+  box-sizing:border-box !important;
+  overscroll-behavior:contain;
+}
+.onboard-overlay .onboard-card{
+  width:100% !important;
+  max-width:460px !important;
+  max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin:12px auto !important;
+  flex:0 0 auto !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  box-sizing:border-box !important;
+  overscroll-behavior:contain;
+}
+#feedbackModal .onboard-card{
+  text-align:left !important;
+  padding:clamp(12px,3.5vw,20px) !important;
+}
+#feedbackModal .onboard-card h3{
+  font-size:clamp(19px,5vw,24px) !important;
+  line-height:1.2 !important;
+}
+#feedbackModal .onboard-card input,
+#feedbackModal .onboard-card select,
+#feedbackModal .onboard-card textarea,
+#feedbackModal .onboard-card button{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  font-size:16px;
+}
+#feedbackModal .onboard-card textarea{min-height:100px;max-height:30dvh;}
+@media(max-height:620px){
+  .onboard-overlay{padding-top:8px !important;padding-bottom:8px !important;}
+  .onboard-overlay .onboard-card{max-height:calc(100dvh - 16px) !important;margin:8px auto !important;}
+}
+
+button{min-height:40px!important;padding:9px 13px!important;font-size:13px!important;line-height:1.15!important;border-radius:9px!important;box-sizing:border-box}
+button.small,button.edit,button.danger,.card-dropdown-btn,.dots-btn,.icon-btn{min-height:36px!important;padding:7px 10px!important;font-size:12px!important}
+.nav-row button{min-height:42px!important;padding:8px 5px!important;font-size:11px!important}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -850,6 +1061,14 @@ input:checked + .slider:before {transform:translateX(20px)}
     <div class="face bottom" id="walletBottom"></div>
   </div>
   <div class="tap-hint">👆 Tap wallet to open</div>
+  <div id="welcomeAdBanner" class="welcome-ad-banner" hidden aria-label="Advertisement">
+    <span class="welcome-ad-label">ADVERTISEMENT</span>
+    <a id="welcomeAdLink" href="#" target="_blank" rel="noopener noreferrer">
+      <strong id="welcomeAdTitle">A message from our partners</strong>
+      <span id="welcomeAdText">Discover more</span>
+    </a>
+    <button type="button" id="welcomeAdClose" aria-label="Dismiss advertisement">×</button>
+  </div>
 </div>
 
 <!-- Main Wallet Settings Modal -->
@@ -860,7 +1079,9 @@ input:checked + .slider:before {transform:translateX(20px)}
   <label style="font-size:11px;font-weight:700">Theme</label>
   <select id="setTheme" onchange="previewTheme()"><option value="matt">Matt Light + Belt</option><option value="classic">Classic Brown</option><option value="black">Black</option><option value="blue">Blue</option><option value="neon">Futurastic Neon</option><option value="light">Light Minimal</option></select>
   <div id="themePreview" style="height:44px;border-radius:8px;margin:6px 0;border:1px solid #d7ccc8"></div>
-  <button onclick="saveSettings()">Save</button><button class="danger" onclick="closeSettings()" style="margin-top:6px;width:100%">Cancel</button>
+  <p style="font-size:10px;color:#6D4C41">Promotions are managed centrally by the app creator.</p>
+  <hr><h3>Data Backup</h3><p style="font-size:11px">Export a backup before updates. Your local records are not intentionally cleared by app updates.</p><button class="ghost" onclick="exportExpenseBackup()">Export Backup</button><button class="ghost" onclick="restoreExpenseBackup()">Restore Local Backup</button><input type="file" accept=".json,application/json" onchange="importExpenseBackup(event)">
+<button onclick="saveSettings()">Save Wallet Settings</button><button class="danger" onclick="closeSettings()" style="margin-top:6px;width:100%">Cancel</button>
 </div></div>
 
 <!-- Onboarding Modal -->
@@ -878,6 +1099,7 @@ input:checked + .slider:before {transform:translateX(20px)}
   </div>
 </div>
 
+<div id="quickSignupModal" class="onboard-overlay" style="display:none"><div class="onboard-card" style="max-width:380px;text-align:left"><div style="font-size:34px;text-align:center">👋</div><h3 style="text-align:center">Welcome to Expense Tracker!</h3><p style="font-size:12px;text-align:center">Set up your wallet in a few seconds.</p><input id="signupName" placeholder="Your name"><input id="signupEmail" type="email" placeholder="Email (optional)"><p style="font-size:10px">Details stay on this device. No online account is created.</p><button onclick="completeQuickSignup()">Continue</button><button class="ghost" onclick="skipQuickSignup()">Skip for now</button></div></div>
 <!-- Feedback Modal - fixed outside onboarding -->
 <div id="feedbackModal" class="onboard-overlay" style="display:none;">
   <div class="onboard-card" style="max-width:380px;text-align:left;">
@@ -1002,7 +1224,7 @@ input:checked + .slider:before {transform:translateX(20px)}
 </div></div>
 
 <div class="container" id="app" style="display:none">
-<div class="topbar"><h2>My Wallet</h2><div class="topbar-actions"><div class="icon-btn" onclick="openNotif()" style="position:relative">🔔<span id="walletNotifBadge" class="nav-badge hidden">0</span></div><div class="icon-btn" onclick="lock()">🔒</div><div class="icon-btn" onclick="openFeedback()" title="Send Feedback" style="background:#FFCC80;">💬</div></div></div>
+<div class="topbar"><h2>My Wallet</h2><div class="topbar-actions"><button id="pwaInstallBtn" class="icon-btn" type="button" onclick="installExpensePWA()" title="Install Expense Tracker" style="width:auto;min-width:36px;padding:0 9px!important;font-size:11px!important;white-space:nowrap">⬇ Install App</button><div class="icon-btn" onclick="openNotif()" style="position:relative">🔔<span id="walletNotifBadge" class="nav-badge hidden">0</span></div><div class="icon-btn" onclick="lock()">🔒</div><div class="icon-btn" onclick="openFeedback()" title="Send Feedback" style="background:#FFCC80;">💬</div></div></div>
 <div class="nav-row"><button class="nav-wallet" onclick="showPage(1)">Wallet <span id="badgeWallet" class="nav-badge hidden">0</span></button><button class="nav-log" onclick="showPage(2)">Log & Graph</button><button class="nav-save" onclick="showPage(3)">Savings</button><button class="nav-report" onclick="showPage(5)">📊 Report</button><button class="nav-report" onclick="showPage(6)" style="background:linear-gradient(135deg,#1565C0,#42A5F5);">📈 Transaction Insight</button><button class="nav-update" onclick="showPage(4)">Updates <span id="badgeUpdate" class="nav-badge hidden">0</span></button></div>
 <div id="page1" class="card">
 <div id="dashboardContainer" class="dashboard-container">
@@ -1117,7 +1339,8 @@ function monthKey(d){
 }
 
 function safeEl(id){ return document.getElementById(id); }
-function saveAll(){ 
+function saveAll(){
+  try{const old=localStorage.getItem('exp');if(old&&old!=='[]'){const keys=['exp','cats','catColors','catDescs','budget','targets','rems','savingsCards','savingsEntries','name','brand','theme','targetSavingsValue','showDashboard','showAmounts','privateCards','hiddenDetails','hideAllData','dashCardSkin','lastReadUpdate'];const data={};keys.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)data[k]=v;});localStorage.setItem('expense_tracker_recovery_v1',JSON.stringify({savedAt:new Date().toISOString(),data}));}}catch(e){console.warn('Backup snapshot unavailable',e);}
   localStorage.setItem('exp',JSON.stringify(expenses)); 
   localStorage.setItem('cats',JSON.stringify(cats)); 
   localStorage.setItem('catColors',JSON.stringify(catColors)); 
@@ -1165,7 +1388,8 @@ function openApp(e){
   const cover=safeEl('walletCover'), app=safeEl('app'); 
   if(!cover||!app) return; 
   cover.style.display='none'; 
-  app.style.display='block'; 
+  app.style.display='block';
+  if(window.maybeShowExpensePromo)window.maybeShowExpensePromo('app_open'); 
   try{ 
     safeEl('owner').innerText=name; 
     safeEl('brand').innerText=brandText; 
@@ -1186,6 +1410,7 @@ function openApp(e){
 }
 
 function checkOnboarding(){
+  if(localStorage.getItem('quick_signup_done_v1')!=='true'){safeEl('quickSignupModal').style.display='flex';safeEl('signupName').value=localStorage.getItem('name')||'';return;}
   if(localStorage.getItem('onboarded_v2') !== 'true'){
     safeEl('onboardingModal').style.display = 'flex';
   }
@@ -1193,7 +1418,7 @@ function checkOnboarding(){
 
 
 function lock(){ safeEl('walletCover').style.display='flex'; safeEl('app').style.display='none'; }
-function openSettings(e){ if(e){ e.preventDefault(); e.stopPropagation(); } safeEl('settingsModal').style.display='flex'; safeEl('setName').value=name; safeEl('setBrand').value=brandText; safeEl('setTheme').value=theme; previewTheme(); }
+function openSettings(e){ if(e){ e.preventDefault(); e.stopPropagation(); } safeEl('settingsModal').style.display='flex'; safeEl('setName').value=name; safeEl('setBrand').value=brandText; safeEl('setTheme').value=theme; loadPromoSettings(); previewTheme(); }
 function closeSettings(){ safeEl('settingsModal').style.display='none'; }
 function previewTheme(){ const th=safeEl('setTheme').value||'matt'; applyThemeToWallet(th); }
 function saveSettings(){ name=safeEl('setName').value.trim()||'User Name'; brandText=safeEl('setBrand').value.trim()||'C&K'; theme=safeEl('setTheme').value||'matt'; saveAll(); applyThemeToWallet(theme); safeEl('owner').innerText=name; safeEl('brand').innerText=brandText; render(); closeSettings(); }
@@ -2017,7 +2242,7 @@ function shiftTileDate(cat, delta){
   tileDateFilter[cat]=d.toISOString().slice(0,10);
   render();
 }
-function showPage(n){ [1,2,3,4,5,6].forEach(i=>{ const el=safeEl('page'+i); if(el) el.style.display='none'; }); const t=safeEl('page'+n); if(t) t.style.display='block'; if(n==2) setTimeout(renderLog,60); if(n==3){ renderSavings(); renderSavingsDashboard(); } if(n==4){ lastReadUpdate=new Date().toISOString(); saveAll(); updateBadges(); renderUpdates(); } }
+function showPage(n){ if(window.maybeShowExpensePromo)window.maybeShowExpensePromo('tab_open'); [1,2,3,4,5,6].forEach(i=>{ const el=safeEl('page'+i); if(el) el.style.display='none'; }); const t=safeEl('page'+n); if(t) t.style.display='block'; if(n==2) setTimeout(renderLog,60); if(n==3){ renderSavings(); renderSavingsDashboard(); } if(n==4){ lastReadUpdate=new Date().toISOString(); saveAll(); updateBadges(); renderUpdates(); } }
 function setMonthFilter(){ currentMonth=safeEl('monthPicker').value||monthKey(); currentDate=''; const dp=safeEl('datePicker'); if(dp) dp.value=''; fillMonthFilter(); render(); renderLog(); }
 function setDateFilter(){ currentDate=safeEl('datePicker').value||''; if(currentDate) currentMonth=currentDate.slice(0,7); if(safeEl('monthPicker')) safeEl('monthPicker').value=currentMonth; fillMonthFilter(); render(); renderLog(); }
 function addExp(cat){ const t=safeEl('t-'+cat).value.trim(), a=Number(safeEl('a-'+cat).value), d=safeEl('d-'+cat).value, desc=safeEl('desc-'+cat).value.trim()||''; if(!t||!a||!d) return alert('Fill title, amount, date'); expenses.unshift({id:Date.now(),title:t,amount:a,date:d,cat,desc,ts:new Date().toLocaleString()}); currentMonth=d.slice(0,7); currentDate=d; saveAll(); render(); renderLog(); updateBadges(); if(safeEl('t-'+cat)) safeEl('t-'+cat).value=''; if(safeEl('a-'+cat)) safeEl('a-'+cat).value=''; if(safeEl('desc-'+cat)) safeEl('desc-'+cat).value=''; }
@@ -3025,5 +3250,152 @@ document.addEventListener('pointerdown', function(ev){
 console.log('V10 FINAL - Only total % with proper bar, limit bars killed');
 </script>
 
+<script>
+window.completeQuickSignup=function(){var n=(safeEl('signupName').value||'').trim(),e=(safeEl('signupEmail').value||'').trim();if(!n){alert('Enter your name or skip for now.');return;}name=n;localStorage.setItem('name',n);if(e)localStorage.setItem('signup_email_local',e);localStorage.setItem('quick_signup_done_v1','true');saveAll();safeEl('quickSignupModal').style.display='none';if(localStorage.getItem('onboarded_v2')!=='true')safeEl('onboardingModal').style.display='flex';};
+window.skipQuickSignup=function(){localStorage.setItem('quick_signup_done_v1','true');safeEl('quickSignupModal').style.display='none';if(localStorage.getItem('onboarded_v2')!=='true')safeEl('onboardingModal').style.display='flex';};
+let expensePromoCache=null,expensePromoLoadedAt=0;
+async function getPromo(){if(expensePromoCache&&Date.now()-expensePromoLoadedAt<60000)return expensePromoCache;try{const r=await fetch('./api/promotion',{cache:'no-store'});expensePromoCache=r.ok?await r.json():{};expensePromoLoadedAt=Date.now();return expensePromoCache;}catch(e){return expensePromoCache||{};}}
+window.maybeShowExpensePromo=async function(ev){var c=await getPromo();if(!c.trigger||c.trigger==='disabled'||(!c.title&&!c.message)||!(c.trigger==='both'||c.trigger===ev))return;var day=new Date().toISOString().slice(0,10),last=localStorage.getItem('expense_promo_last_v1')||'';if(c.frequency==='once_session'&&last.indexOf('session:')===0)return;if(c.frequency==='daily'&&last==='day:'+day)return;var m=safeEl('expensePromoModal');if(!m){m=document.createElement('div');m.id='expensePromoModal';m.className='modal';m.innerHTML='<div class="modal-content"><div style="font-size:11px;font-weight:800">SPONSORED MESSAGE</div><h3 id="expensePromoTitle"></h3><img id="expensePromoImage" alt="Promotion" style="display:none;width:100%;max-height:240px;object-fit:contain;border-radius:10px;margin:8px 0"><p id="expensePromoMessage"></p><a id="expensePromoLink" target="_blank" rel="noopener noreferrer">Learn more</a><button class="ghost" id="expensePromoClose">Close</button></div>';document.body.appendChild(m);m.querySelector('#expensePromoClose').onclick=function(){m.style.display='none';};}safeEl('expensePromoTitle').textContent=c.title||'A message for you';safeEl('expensePromoMessage').textContent=c.message||'';var promoImage=safeEl('expensePromoImage');if(promoImage){promoImage.style.display=c.image_url?'block':'none';if(c.image_url)promoImage.src=c.image_url;else promoImage.removeAttribute('src');}var link=safeEl('expensePromoLink');link.style.display='none';if(c.url){link.href=c.url;link.style.display='inline-block';}m.style.display='flex';if(c.frequency==='once_session')localStorage.setItem('expense_promo_last_v1','session:'+Date.now());if(c.frequency==='daily')localStorage.setItem('expense_promo_last_v1','day:'+day);};
+window.exportExpenseBackup=function(){var keys=['exp','cats','catColors','catDescs','budget','targets','rems','savingsCards','savingsEntries','name','brand','theme','targetSavingsValue','showDashboard','showAmounts','privateCards','hiddenDetails','hideAllData','dashCardSkin','lastReadUpdate'],data={};keys.forEach(function(k){var v=localStorage.getItem(k);if(v!==null)data[k]=v;});var blob=new Blob([JSON.stringify({schemaVersion:1,exportedAt:new Date().toISOString(),data:data},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='expense-tracker-backup.json';a.click();URL.revokeObjectURL(url);};
+window.restoreExpenseBackup=function(){try{var b=JSON.parse(localStorage.getItem('expense_tracker_recovery_v1')||'null');if(!b||!b.data)throw Error('No local backup available yet.');if(!confirm('Restore saved backup from '+b.savedAt+'?'))return;Object.keys(b.data).forEach(function(k){localStorage.setItem(k,b.data[k]);});location.reload();}catch(e){alert(e.message);}};
+window.importExpenseBackup=function(ev){var file=ev.target.files&&ev.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var b=JSON.parse(r.result);if(b.schemaVersion!==1||!b.data)throw Error('Unrecognised backup file.');if(!confirm('Import this backup?'))return;Object.keys(b.data).forEach(function(k){localStorage.setItem(k,String(b.data[k]));});location.reload();}catch(e){alert(e.message);}};r.readAsText(file);};
+</script>
+<script type="module">
+import { App } from 'https://esm.sh/@capacitor/app@8.0.0';
+
+(() => {
+  const pageStack = [];
+  let activePage = 1;
+  let handlingBack = false;
+  const pageIds = [1,2,3,4,5,6];
+
+  const originalShowPage = window.showPage;
+  if (typeof originalShowPage === 'function') {
+    window.showPage = function(nextPage) {
+      const n = Number(nextPage);
+      if (pageIds.includes(n) && n !== activePage) {
+        pageStack.push(activePage);
+        activePage = n;
+      }
+      return originalShowPage.apply(this, arguments);
+    };
+  }
+
+  function visibleModal() {
+    const selectors = [
+      '#passwordModal', '#feedbackModal', '#onboardingModal',
+      '#reportModal', '#categoryModal', '#renameCardModal',
+      '#limitModal', '.custom-modal.show', '.onboard-overlay.show'
+    ];
+    for (const selector of selectors) {
+      const el = document.querySelector(selector);
+      if (!el) continue;
+      const style = getComputedStyle(el);
+      if (style.display !== 'none' && style.visibility !== 'hidden' &&
+          (el.classList.contains('show') || style.display === 'flex' || style.display === 'block')) {
+        return el;
+      }
+    }
+    return null;
+  }
+
+  function closeTopModal(el) {
+    if (el.id === 'passwordModal' && typeof window.cancelPasswordModal === 'function') {
+      window.cancelPasswordModal(); return true;
+    }
+    const close = el.querySelector(
+      '[onclick*="close"], [onclick*="dismiss"], [onclick*="cancel"], [aria-label="Close"], .close-btn, .modal-close'
+    );
+    if (close) { close.click(); return true; }
+    if (el.id === 'feedbackModal' && typeof window.closeFeedback === 'function') {
+      window.closeFeedback(); return true;
+    }
+    if (el.id === 'onboardingModal' && typeof window.dismissOnboarding === 'function') {
+      window.dismissOnboarding(); return true;
+    }
+    if (el.id === 'reportModal' && typeof window.closeReportModal === 'function') {
+      window.closeReportModal(); return true;
+    }
+    return false;
+  }
+
+  App.addListener('backButton', ({ canGoBack }) => {
+    if (handlingBack) return;
+    handlingBack = true;
+    try {
+      const modal = visibleModal();
+      if (modal && closeTopModal(modal)) return;
+      const expanded=document.querySelector('.tile.expanded, .save-tile.expanded');
+      if(expanded){const close=expanded.querySelector('.close-tile');if(close)close.click();else{expanded.classList.remove('expanded');if(typeof window.render==='function')window.render();}pageStack.length=0;activePage=1;originalShowPage.call(window,1);return;}
+
+      while (pageStack.length) {
+        const previous = pageStack.pop();
+        if (pageIds.includes(previous)) {
+          activePage = previous;
+          originalShowPage.call(window, previous);
+          return;
+        }
+      }
+
+      if (activePage !== 1) {
+        pageStack.length=0;
+        activePage = 1;
+        originalShowPage.call(window, 1);
+        return;
+      }
+
+      // On the home page, consume the first back gesture instead of minimizing
+      // the app unexpectedly. A second deliberate system back may exit normally.
+    } finally {
+      setTimeout(() => { handlingBack = false; }, 250);
+    }
+  });
+})();
+</script>
+
+
+<script>
+/* PWA installation: show before the reminder/notification icon. */
+(function(){
+  var deferred=null,btn=document.getElementById('pwaInstallBtn');
+  if(!btn)return;
+  function standalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
+  function refresh(){btn.style.display='inline-flex';btn.textContent=standalone()?'↗ Open Web App':'⬇ Install App';}
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;refresh();btn.textContent='⬇ Install App';});
+  window.addEventListener('appinstalled',function(){deferred=null;refresh();});
+  window.installExpensePWA=async function(){
+    if(standalone()){window.open('https://expense-tracker-react-db4.pages.dev/','_blank','noopener');return;}
+    if(deferred){deferred.prompt();try{await deferred.userChoice;}catch(e){}deferred=null;refresh();return;}
+    // If the browser has not offered an install prompt yet, open the Cloudflare-hosted PWA.
+    window.open('https://expense-tracker-react-db4.pages.dev/','_blank','noopener');
+    alert('Open the Cloudflare app in Chrome, then use the browser menu → Install app or Add to Home screen.');
+  };
+  refresh();
+  if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+    window.addEventListener('load',function(){navigator.serviceWorker.register('./service-worker.js').catch(function(err){console.warn('PWA service worker:',err);});});
+  }
+})();
+</script>
+
+
+<script>
+/* Anonymous aggregate telemetry. Admin statistics are available only from the Access-protected creator route. */
+(function(){
+ const API='./api/analytics';
+ let deviceId=localStorage.getItem('expense_analytics_device_v1');
+ if(!deviceId){
+  deviceId=(crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});
+  localStorage.setItem('expense_analytics_device_v1',deviceId);
+ }
+ function installed(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
+ async function ping(){if(document.visibilityState==='hidden')return;try{await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId,installed:installed()})});}catch(e){}}
+ window.addEventListener('appinstalled',ping);
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')ping();});
+ window.addEventListener('load',()=>{ping();setInterval(ping,30000);if(window.maybeShowExpensePromo)window.maybeShowExpensePromo('app_open');},{once:true});
+})();
+</script>
+
+<script src="./ads-config.js"></script>
+<script src="./ads.js"></script>
 </body>
 </html>

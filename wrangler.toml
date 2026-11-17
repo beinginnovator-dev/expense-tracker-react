@@ -1,0 +1,8 @@
+name = "expense-tracker-react"
+compatibility_date = "2026-11-17"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "ANALYTICS"
+database_name = "expense-tracker-analytics"
+database_id = "77fd62b2-43e1-4185-831d-5a213c40bc2d"

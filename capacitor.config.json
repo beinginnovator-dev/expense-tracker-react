@@ -1,0 +1,13 @@
+{
+  "appId": "com.beinginnovator.expensetracker",
+  "appName": "Expense Tracker",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
