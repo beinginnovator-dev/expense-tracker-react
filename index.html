@@ -1083,6 +1083,19 @@ button.small,button.edit,button.danger,.card-dropdown-btn,.dots-btn,.icon-btn{mi
 <label style="font-size:11px">Display event</label><select id="promoTrigger"><option value="disabled">Disabled</option><option value="app_open">App opens</option><option value="tab_open">Tab opens</option><option value="both">Both</option></select>
 <input id="promoTitle" placeholder="Promotion title"><textarea id="promoMessage" rows="2" placeholder="Promotion message"></textarea><input id="promoUrl" type="url" placeholder="Optional HTTPS link">
 <select id="promoFrequency"><option value="once_session">Once per session</option><option value="daily">Once per day</option><option value="every_event">Every matching event</option></select><button class="ghost" onclick="savePromoSettings()">Save Promotion</button>
+<p style="font-size:10px;color:#6D4C41">Popup event and frequency settings are stored on this device. Use the controls above to preview the promotion behaviour on this installation.</p>
+<hr><h3>Live Users & PWA Installs</h3>
+<p style="font-size:11px;color:#6D4C41">Anonymous aggregate counts. Online means active within the last 90 seconds.</p>
+<button class="ghost" onclick="refreshAudienceStats()">View Live Audience</button>
+<div id="audienceStatsPanel" style="display:none;background:#fdf8f3;border:1px solid #d7ccc8;border-radius:10px;padding:10px;margin:6px 0">
+ <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+  <div style="background:#fff;padding:10px;border-radius:8px"><small>Online now</small><div id="audOnline" style="font-size:24px;font-weight:900;color:#2e7d32">—</div></div>
+  <div style="background:#fff;padding:10px;border-radius:8px"><small>PWA installs reported</small><div id="audInstalled" style="font-size:24px;font-weight:900;color:#1565c0">—</div></div>
+  <div style="background:#fff;padding:10px;border-radius:8px"><small>Total devices seen</small><div id="audTotal" style="font-size:24px;font-weight:900">—</div></div>
+  <div style="background:#fff;padding:10px;border-radius:8px"><small>New devices today</small><div id="audToday" style="font-size:24px;font-weight:900">—</div></div>
+ </div>
+ <p id="audUpdated" style="font-size:10px;color:#6D4C41;margin:8px 0 0">Not refreshed yet</p>
+</div>
 <hr><h3>Data Backup</h3><p style="font-size:11px">Export a backup before updates. Your local records are not intentionally cleared by app updates.</p><button class="ghost" onclick="exportExpenseBackup()">Export Backup</button><button class="ghost" onclick="restoreExpenseBackup()">Restore Local Backup</button><input type="file" accept=".json,application/json" onchange="importExpenseBackup(event)">
 <button onclick="saveSettings()">Save Wallet Settings</button><button class="danger" onclick="closeSettings()" style="margin-top:6px;width:100%">Cancel</button>
 </div></div>
@@ -3378,6 +3391,37 @@ import { App } from 'https://esm.sh/@capacitor/app@8.0.0';
   if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
     window.addEventListener('load',function(){navigator.serviceWorker.register('./service-worker.js').catch(function(err){console.warn('PWA service worker:',err);});});
   }
+})();
+</script>
+
+
+<script>
+/* Anonymous aggregate audience telemetry: no names, emails or IP addresses are collected. */
+(function(){
+ const API='./api/analytics';
+ let deviceId=localStorage.getItem('expense_analytics_device_v1');
+ if(!deviceId){
+  deviceId=(crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});
+  localStorage.setItem('expense_analytics_device_v1',deviceId);
+ }
+ function installed(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
+ async function ping(){
+  if(document.visibilityState==='hidden')return;
+  try{await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId,installed:installed()})});}catch(e){}
+ }
+ window.addEventListener('appinstalled',()=>{ping();});
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')ping();});
+ window.addEventListener('load',()=>{ping();setInterval(ping,30000);if(window.maybeShowExpensePromo)window.maybeShowExpensePromo('app_open');},{once:true});
+ window.refreshAudienceStats=async function(){
+  const panel=document.getElementById('audienceStatsPanel');if(panel)panel.style.display='block';
+  const updated=document.getElementById('audUpdated');if(updated)updated.textContent='Loading…';
+  try{
+   const r=await fetch(API,{cache:'no-store'});if(!r.ok)throw new Error('Analytics API '+r.status);
+   const d=await r.json();
+   [['audOnline',d.onlineNow],['audInstalled',d.installedDevices],['audTotal',d.totalDevices],['audToday',d.newToday]].forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.textContent=Number(v||0).toLocaleString();});
+   if(updated)updated.textContent='Updated '+new Date().toLocaleTimeString()+' · Online window: 90 seconds';
+  }catch(e){if(updated)updated.textContent='Audience stats unavailable. Check Cloudflare deployment and D1 binding.';}
+ };
 })();
 </script>
 
