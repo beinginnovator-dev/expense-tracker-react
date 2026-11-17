@@ -20,7 +20,7 @@ export async function onRequest({request,env}) {
       const message=String(body.message||"").slice(0,1000);
       const url=String(body.url||"").trim();
       const imageUrl=String(body.image_url||"").trim();
-      if(url && !/^https:\/\//i.test(url))return json({error:"Promotion link must use HTTPS"},400);
+      if(url && !/^https:\/\//i.test(url))return json({error:"Promotion link must use HTTPS"},400);\n      if(imageUrl && !/^https:\/\//i.test(imageUrl))return json({error:"Promotion image must use HTTPS"},400);
       await env.ANALYTICS.prepare("INSERT INTO promo_config(id,trigger,title,message,url,image_url,frequency,updated_at) VALUES(1,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET trigger=excluded.trigger,title=excluded.title,message=excluded.message,url=excluded.url,image_url=excluded.image_url,frequency=excluded.frequency,updated_at=excluded.updated_at").bind(trigger,title,message,url,imageUrl,frequency,Math.floor(Date.now()/1000)).run();
       return json({ok:true});
     }
