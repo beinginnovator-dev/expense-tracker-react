@@ -3250,9 +3250,7 @@ document.addEventListener('pointerdown', function(ev){
 console.log('V10 FINAL - Only total % with proper bar, limit bars killed');
 </script>
 
-
-
-
+<script>
 window.completeQuickSignup=function(){var n=(safeEl('signupName').value||'').trim(),e=(safeEl('signupEmail').value||'').trim();if(!n){alert('Enter your name or skip for now.');return;}name=n;localStorage.setItem('name',n);if(e)localStorage.setItem('signup_email_local',e);localStorage.setItem('quick_signup_done_v1','true');saveAll();safeEl('quickSignupModal').style.display='none';if(localStorage.getItem('onboarded_v2')!=='true')safeEl('onboardingModal').style.display='flex';};
 window.skipQuickSignup=function(){localStorage.setItem('quick_signup_done_v1','true');safeEl('quickSignupModal').style.display='none';if(localStorage.getItem('onboarded_v2')!=='true')safeEl('onboardingModal').style.display='flex';};
 function getPromo(){try{return JSON.parse(localStorage.getItem('expense_promo_config_v1')||'{}')}catch(e){return {}}}
@@ -3262,7 +3260,7 @@ window.maybeShowExpensePromo=function(ev){var c=getPromo();if(!c.trigger||c.trig
 window.exportExpenseBackup=function(){var keys=['exp','cats','catColors','catDescs','budget','targets','rems','savingsCards','savingsEntries','name','brand','theme','targetSavingsValue','showDashboard','showAmounts','privateCards','hiddenDetails','hideAllData','dashCardSkin','lastReadUpdate'],data={};keys.forEach(function(k){var v=localStorage.getItem(k);if(v!==null)data[k]=v;});var blob=new Blob([JSON.stringify({schemaVersion:1,exportedAt:new Date().toISOString(),data:data},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='expense-tracker-backup.json';a.click();URL.revokeObjectURL(url);};
 window.restoreExpenseBackup=function(){try{var b=JSON.parse(localStorage.getItem('expense_tracker_recovery_v1')||'null');if(!b||!b.data)throw Error('No local backup available yet.');if(!confirm('Restore saved backup from '+b.savedAt+'?'))return;Object.keys(b.data).forEach(function(k){localStorage.setItem(k,b.data[k]);});location.reload();}catch(e){alert(e.message);}};
 window.importExpenseBackup=function(ev){var file=ev.target.files&&ev.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var b=JSON.parse(r.result);if(b.schemaVersion!==1||!b.data)throw Error('Unrecognised backup file.');if(!confirm('Import this backup?'))return;Object.keys(b.data).forEach(function(k){localStorage.setItem(k,String(b.data[k]));});location.reload();}catch(e){alert(e.message);}};r.readAsText(file);};
-
+</script>
 <script type="module">
 import { App } from 'https://esm.sh/@capacitor/app@8.0.0';
 
