@@ -3391,7 +3391,7 @@ import { App } from 'https://esm.sh/@capacitor/app@8.0.0';
  async function ping(){if(document.visibilityState==='hidden')return;try{await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId,installed:installed()})});}catch(e){}}
  window.addEventListener('appinstalled',ping);
  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')ping();});
- window.addEventListener('load',()=>{ping();setInterval(ping,30000);if(window.maybeShowExpensePromo)window.maybeShowExpensePromo('app_open');},{once:true});
+ window.addEventListener('load',()=>{ping();setInterval(ping,30000);},{once:true});
 })();
 </script>
 
