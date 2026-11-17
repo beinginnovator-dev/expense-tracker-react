@@ -3238,6 +3238,97 @@ console.log('V10 FINAL - Only total % with proper bar, limit bars killed');
 </script>
 
 
+
+<script type="module">
+import { App } from 'https://esm.sh/@capacitor/app@8.0.0';
+
+(() => {
+  const pageStack = [];
+  let activePage = 1;
+  let handlingBack = false;
+  const pageIds = [1,2,3,4,5,6];
+
+  const originalShowPage = window.showPage;
+  if (typeof originalShowPage === 'function') {
+    window.showPage = function(nextPage) {
+      const n = Number(nextPage);
+      if (pageIds.includes(n) && n !== activePage) {
+        pageStack.push(activePage);
+        activePage = n;
+      }
+      return originalShowPage.apply(this, arguments);
+    };
+  }
+
+  function visibleModal() {
+    const selectors = [
+      '#passwordModal', '#feedbackModal', '#onboardingModal',
+      '#reportModal', '#categoryModal', '#renameCardModal',
+      '#limitModal', '.custom-modal.show', '.onboard-overlay.show'
+    ];
+    for (const selector of selectors) {
+      const el = document.querySelector(selector);
+      if (!el) continue;
+      const style = getComputedStyle(el);
+      if (style.display !== 'none' && style.visibility !== 'hidden' &&
+          (el.classList.contains('show') || style.display === 'flex' || style.display === 'block')) {
+        return el;
+      }
+    }
+    return null;
+  }
+
+  function closeTopModal(el) {
+    if (el.id === 'passwordModal' && typeof window.cancelPasswordModal === 'function') {
+      window.cancelPasswordModal(); return true;
+    }
+    const close = el.querySelector(
+      '[onclick*="close"], [onclick*="dismiss"], [onclick*="cancel"], [aria-label="Close"], .close-btn, .modal-close'
+    );
+    if (close) { close.click(); return true; }
+    if (el.id === 'feedbackModal' && typeof window.closeFeedback === 'function') {
+      window.closeFeedback(); return true;
+    }
+    if (el.id === 'onboardingModal' && typeof window.dismissOnboarding === 'function') {
+      window.dismissOnboarding(); return true;
+    }
+    if (el.id === 'reportModal' && typeof window.closeReportModal === 'function') {
+      window.closeReportModal(); return true;
+    }
+    return false;
+  }
+
+  App.addListener('backButton', ({ canGoBack }) => {
+    if (handlingBack) return;
+    handlingBack = true;
+    try {
+      const modal = visibleModal();
+      if (modal && closeTopModal(modal)) return;
+
+      while (pageStack.length) {
+        const previous = pageStack.pop();
+        if (pageIds.includes(previous)) {
+          activePage = previous;
+          originalShowPage.call(window, previous);
+          return;
+        }
+      }
+
+      if (activePage !== 1) {
+        activePage = 1;
+        originalShowPage.call(window, 1);
+        return;
+      }
+
+      // On the home page, consume the first back gesture instead of minimizing
+      // the app unexpectedly. A second deliberate system back may exit normally.
+    } finally {
+      setTimeout(() => { handlingBack = false; }, 250);
+    }
+  });
+})().catch?.(() => {});
+</script>
+
 <script src="./ads-config.js"></script>
 <script src="./ads.js"></script>
 </body>
