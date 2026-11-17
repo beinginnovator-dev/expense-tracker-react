@@ -9,7 +9,7 @@ export async function onRequest({request,env}) {
     if(request.method==="GET"){
       const now=Math.floor(Date.now()/1000);
       const stats=await env.ANALYTICS.prepare("SELECT COUNT(*) AS totalDevices, SUM(CASE WHEN last_seen>=? THEN 1 ELSE 0 END) AS onlineNow, SUM(is_installed) AS installedDevices, SUM(CASE WHEN first_seen>=? THEN 1 ELSE 0 END) AS newToday FROM app_devices").bind(now-90,now-86400).first();
-      const promo=await env.ANALYTICS.prepare("SELECT trigger,title,message,url,frequency FROM promo_config WHERE id=1").first();
+      const promo=await env.ANALYTICS.prepare("SELECT trigger,title,message,url,image_url,frequency FROM promo_config WHERE id=1").first();
       return json({stats:{onlineNow:stats?.onlineNow||0,installedDevices:stats?.installedDevices||0,totalDevices:stats?.totalDevices||0,newToday:stats?.newToday||0},promo:promo||{trigger:"disabled",title:"",message:"",url:"",frequency:"once_session"}});
     }
     if(request.method==="POST"){
@@ -19,8 +19,9 @@ export async function onRequest({request,env}) {
       const title=String(body.title||"").slice(0,120);
       const message=String(body.message||"").slice(0,1000);
       const url=String(body.url||"").trim();
+      const imageUrl=String(body.image_url||"").trim();
       if(url && !/^https:\/\//i.test(url))return json({error:"Promotion link must use HTTPS"},400);
-      await env.ANALYTICS.prepare("INSERT INTO promo_config(id,trigger,title,message,url,frequency,updated_at) VALUES(1,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET trigger=excluded.trigger,title=excluded.title,message=excluded.message,url=excluded.url,frequency=excluded.frequency,updated_at=excluded.updated_at").bind(trigger,title,message,url,frequency,Math.floor(Date.now()/1000)).run();
+      await env.ANALYTICS.prepare("INSERT INTO promo_config(id,trigger,title,message,url,image_url,frequency,updated_at) VALUES(1,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET trigger=excluded.trigger,title=excluded.title,message=excluded.message,url=excluded.url,image_url=excluded.image_url,frequency=excluded.frequency,updated_at=excluded.updated_at").bind(trigger,title,message,url,imageUrl,frequency,Math.floor(Date.now()/1000)).run();
       return json({ok:true});
     }
     return json({error:"Method not allowed"},405);
