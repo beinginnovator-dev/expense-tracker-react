@@ -17,20 +17,21 @@ A separate, native Flutter implementation of the My Wallet Expense Tracker. The 
 
 ## Run locally
 1. Install Flutter stable and Android Studio.
-2. From this folder run `flutter pub get`.
-3. For local-only use, run `flutter run`. Expense data stays on the device.
-4. To enable real account login, configure Firebase for Android:
+2. From this folder generate the Android platform scaffold: `flutter create --platforms=android --project-name my_wallet_flutter .` (keep the existing `lib/` files).
+3. Run `flutter pub get`.
+4. For local-only use, run `flutter run`. Expense data stays on the device.
+5. To enable real account login, configure Firebase for Android:
    - Create a Firebase project and add your Android application ID.
    - Run `dart pub global activate flutterfire_cli`.
    - Run `flutterfire configure` from this directory. This generates `lib/firebase_options.dart`.
    - Enable Email/Password and Phone providers in Firebase Authentication.
    - Add the generated Android `google-services.json` as instructed by FlutterFire.
    - Enable Firestore if you want to add cloud backup/sync in the next stage.
-5. Build an APK with `flutter build apk --release`.
+6. Build an APK with `flutter build apk --release`.
 
 ## Authentication notes
-- Firebase login is optional until a Firebase project is connected. Without Firebase configuration, the app runs in local-only mode.
-- Email login uses email + password. Phone login uses Firebase SMS OTP.
+- Firebase login is optional until a Firebase project is connected. Without Firebase configuration, the app runs in local-only mode. The placeholder `lib/firebase_options.dart` is replaced by `flutterfire configure`.
+- Email login uses email + password. Phone login uses Firebase SMS OTP. The Firestore profile stores the selected Free plan; expense records currently remain in local device storage.
 - The Free plan is selected automatically after successful account creation. No payment or card is collected.
 - Never commit Firebase service-account credentials or private API keys.
 
