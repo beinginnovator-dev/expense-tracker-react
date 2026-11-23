@@ -5,6 +5,7 @@ ROOT_DIR="$(pwd)"
 FLUTTER_DIR="/tmp/flutter"
 RELEASES_JSON="/tmp/flutter-releases.json"
 
+echo "Building My Wallet Flutter for Cloudflare Pages..."
 echo "Resolving latest stable Flutter SDK..."
 curl -fsSL https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json -o "$RELEASES_JSON"
 FLUTTER_ARCHIVE="$(python3 -c 'import json; d=json.load(open("/tmp/flutter-releases.json")); print(next(r["archive"] for r in d["releases"] if r.get("channel")=="stable" and r.get("archive","").endswith(".tar.xz")))')"
