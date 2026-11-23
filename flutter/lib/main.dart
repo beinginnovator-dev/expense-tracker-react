@@ -6,13 +6,14 @@ import 'package:share_plus/share_plus.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 const brown=Color(0xFF5D4037), tan=Color(0xFFD7CCC8), gold=Color(0xFFFFCC80);
 final money=NumberFormat.currency(locale:'en_IN',symbol:'₹',decimalDigits:2);
-Future<void> main() async { WidgetsFlutterBinding.ensureInitialized(); var ready=false; try { await Firebase.initializeApp(); ready=true; } catch (_) {} runApp(App(firebaseReady:ready)); }
+Future<void> main() async { WidgetsFlutterBinding.ensureInitialized(); var ready=false; try { await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform); ready=true; } catch (_) {} runApp(App(firebaseReady:ready)); }
 
 class Expense {
   Expense(this.id,this.title,this.category,this.amount,this.date,{this.note='',this.splitMode='',this.shares=const []});
@@ -41,7 +42,7 @@ class _HomeState extends State<Home>{
  Future<void> save()async{final p=await SharedPreferences.getInstance();await p.setString('expenses',jsonEncode(items.map((e)=>e.json()).toList()));await p.setString('goals',jsonEncode(goals));await p.setDouble('budget',budget);await p.setBool('dark',dark);}
  double get total=>items.fold(0,(s,e)=>s+e.amount); double get month=>items.where((e)=>e.date.month==DateTime.now().month&&e.date.year==DateTime.now().year).fold(0,(s,e)=>s+e.amount);
  String statement(){final b=StringBuffer('MY WALLET — EXPENSE STATEMENT\n');b.writeln('Generated: '+DateFormat('dd MMM yyyy').format(DateTime.now()));b.writeln('Date | Description | Category | Amount');for(final e in items){b.writeln(DateFormat('dd/MM/yyyy').format(e.date)+' | '+e.title+' | '+e.category+' | '+money.format(e.amount));}b.writeln('TOTAL: '+money.format(total));return b.toString();}
- Future<void> shareStatement()async=>Share.share(statement(),subject:'My Wallet expense statement');
+ Future<void> shareStatement() async { await Share.share(statement(),subject:'My Wallet expense statement'); }
  Future<void> pdfStatement()async{final d=pw.Document();d.addPage(pw.MultiPage(build:(_)=>[pw.Header(level:0,child:pw.Text('My Wallet Expense Statement')),pw.Text('Generated '+DateFormat('dd MMM yyyy').format(DateTime.now())),pw.TableHelper.fromTextArray(headers:['Date','Title','Category','Amount'],data:items.map((e)=>[DateFormat('dd/MM/yy').format(e.date),e.title,e.category,money.format(e.amount)]).toList()),pw.Text('Total: '+money.format(total))]));await Printing.layoutPdf(onLayout:(_)=>d.save());}
  Future<void> csv()async{final b=StringBuffer('Date,Title,Category,Amount,Note\n');for(final e in items){String q(String s)=>'"'+s.replaceAll('"','""')+'"';b.writeln(q(DateFormat('yyyy-MM-dd').format(e.date))+','+q(e.title)+','+q(e.category)+','+e.amount.toString()+','+q(e.note));}await Share.share(b.toString(),subject:'My Wallet CSV');}
  Future<void> add({Expense? old,bool split=false})async{final r=await showModalBottomSheet<Expense>(context:context,isScrollControlled:true,builder:(_)=>split?SplitForm(categories:cats):ExpenseForm(categories:cats,old:old));if(r!=null){setState(()=>old==null?items.add(r):items[items.indexWhere((e)=>e.id==old.id)]=r);await save();}}
