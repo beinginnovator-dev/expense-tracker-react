@@ -1,0 +1,42 @@
+name: Build My Wallet Flutter APK
+
+on:
+  push:
+    branches: [flutter-native]
+    paths:
+      - 'flutter/**'
+      - '.github/workflows/flutter-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android-apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: flutter
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Generate Android platform project
+        run: flutter create --platforms=android --project-name my_wallet_flutter --org com.beinginnovator .
+      - name: Resolve packages
+        run: flutter pub get
+      - name: Analyze Dart source
+        run: flutter analyze
+      - name: Build release APK
+        run: flutter build apk --release
+      - name: Upload installable APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-wallet-flutter-apk
+          path: flutter/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 14
