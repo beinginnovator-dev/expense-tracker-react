@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(pwd)"
-FLUTTER_DIR="/tmp/flutter-sdk"
+FLUTTER_DIR="/tmp/flutter"
 RELEASES_JSON="/tmp/flutter-releases.json"
 
 echo "Resolving latest stable Flutter SDK..."
